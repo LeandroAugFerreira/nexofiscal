@@ -1,0 +1,28 @@
+const {chromium}=require(process.env.FITNOTA_PLAYWRIGHT_MODULE||'playwright');
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..'),base='http://127.0.0.1:5180';
+const env=fs.readFileSync(path.join(root,'.env'),'utf8').split(/\r?\n/);
+const setting=key=>{const line=env.find(x=>x.startsWith(key+'='));return line?line.slice(key.length+1).trim().replace(/^(['"])(.*)\1$/,'$2'):'';};
+const shots=path.join(root,'artifacts','screenshots','n8n');fs.mkdirSync(shots,{recursive:true});
+let browser,stage='startup';
+(async()=>{
+ browser=await chromium.launch({headless:true,channel:'msedge'});
+ const page=await browser.newPage({viewport:{width:1440,height:1000},locale:'pt-BR'});
+ const errors=[];page.on('pageerror',e=>errors.push(e.name));
+ await page.route('**/api/invoices/*/email-send',route=>route.abort());
+ await page.goto(base+'/automations',{waitUntil:'domcontentloaded'});
+ await page.getByLabel('E-mail',{exact:true}).fill(setting('DEMO_EMAIL'));await page.getByLabel('Senha',{exact:true}).fill(setting('DEMO_ADMIN_PASSWORD')||setting('DEMO_PASSWORD'));
+ await page.getByRole('button',{name:'Entrar no NexoFiscal',exact:true}).click();await page.getByRole('heading',{name:'Automações',exact:true}).waitFor();
+ stage='connection';await page.getByRole('tab',{name:'Conexão n8n',exact:true}).click();await page.getByRole('heading',{name:'n8n disponível',exact:true}).waitFor();
+ assert.equal(await page.getByRole('link',{name:'Abrir n8n',exact:true}).getAttribute('href'),'http://127.0.0.1:5678');
+ await page.screenshot({path:path.join(shots,'conexao-real.png'),fullPage:true});
+ stage='execution';await page.getByRole('tab',{name:/^Rotinas/}).click();const card=page.locator('.workflow-card').filter({hasText:'Alertas → verificar operação'});
+ await card.getByRole('button',{name:'Executar Alertas → verificar operação',exact:true}).click();
+ await page.getByLabel('Executar usando',{exact:true}).selectOption('n8n');
+ const [response]=await Promise.all([page.waitForResponse(r=>r.request().method()==='POST'&&r.url().includes('/run?via=n8n')),page.getByRole('button',{name:'Executar agora',exact:true}).click()]);
+ assert(response.ok());const result=await response.json();assert.equal(result.source,'n8n');assert.equal(result.status,'sucesso');
+ await page.getByRole('heading',{name:'Resultado da rotina',exact:true}).waitFor();await page.screenshot({path:path.join(shots,'resultado-n8n.png'),fullPage:true});
+ await page.getByRole('button',{name:'Fechar janela',exact:true}).click();await page.getByRole('tab',{name:/^Histórico/}).click();await page.getByRole('button',{name:'Ver resultado',exact:true}).first().waitFor();await page.screenshot({path:path.join(shots,'historico-n8n.png'),fullPage:true});
+ await page.getByRole('button',{name:'Sair',exact:true}).click();assert.deepEqual(errors,[]);
+ console.log('PASS: conexão real, escolha n8n na interface, execução de alertas e histórico com origem n8n. Sem emissão ou e-mail.');
+})().catch(error=>{console.error('FAIL stage='+stage+' '+error.name+'; dados privados omitidos.');process.exitCode=1;}).finally(async()=>{await browser?.close();});

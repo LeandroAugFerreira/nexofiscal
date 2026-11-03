@@ -1,0 +1,42 @@
+import PageFilters from '../components/common/PageFilters';
+import {Pagination,PaginatedItems} from '../components/common/Pagination';
+import {useState} from 'react';
+import EmailConfiguration from '../components/common/EmailConfiguration';
+import {MetricGrid} from '../components/charts/ResourceInsights';
+import {Settings2,ShieldCheck,Building2,Workflow,ArrowUpRight,Download,Clock,Layers3,CheckCircle2,LockKeyhole,History} from 'lucide-react';
+import {Link,useSearchParams} from 'react-router-dom';
+import {Tabs,TabPanel} from '../components/common/Tabs';
+import {useApi} from '../hooks/useApi';
+import {useAuth} from '../contexts/AuthContext';
+import {useUI} from '../contexts/UIContext';
+import {write,query} from '../services/api';
+import {date,label} from '../utils/format';
+import {PageHeader,Loading,ErrorState,Modal,Badge,Empty} from '../components/common/Primitives';
+import {EntityForm} from '../components/forms/EntityForm';
+
+export function Academy(){
+  const {data,loading,error,reload}=useApi('/company'),{can}=useAuth(),[edit,setEdit]=useState(false);
+  if(loading)return <Loading/>;if(error)return <ErrorState message={error} retry={reload}/>;
+  return <><PageHeader eyebrow="ADMINISTRAÇÃO" title="Empresa emissora" description="Os dados da sua operação, organizados e sempre à mão.">{can('settings')&&<button className="button" onClick={()=>setEdit(true)}><Settings2 size={16}/>Editar cadastro</button>}</PageHeader><div className="settings-grid"><section className="card profile-card"><div className="large-icon"><Building2 size={35}/></div><h2>{data.name}</h2><p className="muted">{data.legal_name}</p><span className="badge">EMPRESA DEMONSTRATIVA</span></section><section className="card settings-details"><h2>Informações cadastrais</h2><dl>{[['CNPJ',data.cnpj],['Inscrição municipal',data.municipal_registration],['E-mail',data.email],['Telefone',data.phone],['Regime tributário',data.tax_regime],['Endereço',Object.values(data.address||{}).filter(Boolean).join(', ')]].map(([key,value])=><div key={key}><dt>{key}</dt><dd>{value||'Não informado'}</dd></div>)}</dl></section></div>{edit&&<Modal title="Editar empresa" onClose={()=>setEdit(false)} wide><EntityForm resource="company" record={data} onCancel={()=>setEdit(false)} onSaved={()=>{setEdit(false);reload();}}/></Modal>}</>;
+}
+export function FiscalConfig(){
+  const {data,loading,error,reload}=useApi('/fiscal-config'),{can}=useAuth(),[edit,setEdit]=useState(false);
+  const [params,setParams]=useSearchParams(),tab=params.get('tab')==='email'?'email':'fiscal';
+  if(loading)return <Loading/>;if(error)return <ErrorState message={error} retry={reload}/>;
+  return <><PageHeader eyebrow="CONFIGURAÇÕES" title="Configuração fiscal" description="Parâmetros de emissão e entrega de documentos.">{can('settings')&&tab==='fiscal'&&<button className="button" onClick={()=>setEdit(true)}><Settings2 size={16}/>Editar parâmetros</button>}</PageHeader>
+    <Tabs page id="settings" label="Configurações de emissão" tabs={[{value:'fiscal',label:'Fiscal'},{value:'email',label:'E-mail'}]} value={tab} onChange={value=>setParams(value==='email'?{tab:value}:{})}/>
+    <TabPanel id="settings" value={tab} className="settings-tab-content">
+      {tab==='email'?<EmailConfiguration/>:<section className="card settings-details"><div className="card-title"><h2>Conexão fiscal</h2><ShieldCheck size={22}/></div><dl><div><dt>Ambiente</dt><dd><Badge value={data.environment}/></dd></div><div><dt>Provedor</dt><dd>Simulador fiscal NexoFiscal</dd></div><div><dt>Município de referência</dt><dd>{data.municipality||'Não configurado'}</dd></div><div><dt>Situação</dt><dd>{data.connection.message}</dd></div></dl><Link className="text-link" to="/system?tab=tecnico">Sobre a integração e os limites do ambiente<ArrowUpRight size={14}/></Link></section>}
+    </TabPanel>
+    {edit&&<Modal title="Configurar simulador" onClose={()=>setEdit(false)}><EntityForm resource="fiscal-config" record={data} onCancel={()=>setEdit(false)} onSaved={()=>{setEdit(false);reload();}}/></Modal>}
+  </>;
+}
+export {default as Automations} from './Automations';
+export function Reports(){
+  const [start,setStart]=useState(''),[end,setEnd]=useState(''),[status,setStatus]=useState(''),[student,setStudent]=useState(''),[plan,setPlan]=useState('');
+  const {data:students}=useApi('/clients?page_size=100'),{data:plans}=useApi('/plans?page_size=100');
+  const reports=[['Receitas e pagamentos','payments','Recebimentos manuais, por data de pagamento.'],['Cobranças','charges','Valores previstos, pagos e saldos por vencimento.'],['Inadimplência','charges','Cobranças pendentes e vencidas.','vencida'],['Contratos por plano','contracts','Valores contratados e vínculos por início.'],['Documentos simulados','invoices','Registros fiscais internos, por data de criação.'],['Rejeições simuladas','invoices','Solicitações rejeitadas pelo simulador.','rejeitada'],['Cancelamentos simulados','invoices','Documentos cancelados no ambiente de demonstração.','cancelada']];
+  return <><PageHeader eyebrow="DADOS & RESULTADOS" title="Relatórios" description="Transforme os registros da empresa em informações úteis."/><PageFilters label="Filtros de relatórios"><section className="card report-filters"><label className="field"><span>De</span><input type="date" value={start} onChange={e=>setStart(e.target.value)}/></label><label className="field"><span>Até</span><input type="date" min={start} value={end} onChange={e=>setEnd(e.target.value)}/></label><label className="field"><span>Cliente</span><select value={student} onChange={e=>setStudent(e.target.value)}><option value="">Todos os clientes</option>{students?.items.map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label><label className="field"><span>Plano</span><select value={plan} onChange={e=>setPlan(e.target.value)}><option value="">Todos os planos</option>{plans?.items.map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label><label className="field"><span>Status</span><select value={status} onChange={e=>setStatus(e.target.value)}><option value="">Todos os status</option>{['paga','pendente','vencida','parcialmente_paga','ativo','suspenso','cancelado','autorizada','rejeitada','cancelada','registrado_manual'].map(x=><option value={x} key={x}>{label(x)}</option>)}</select></label></section></PageFilters><PaginatedItems items={reports} label="relatórios">{pageReports=><div className="report-grid">{pageReports.map(([title,resource,description,forced])=><section className="card report-card" key={title}><div className="large-icon"><Download size={22}/></div><h2>{title}</h2><p className="muted">{description}</p><a className="button secondary" href={`/api/reports/${resource}.csv?${query({start,end,status:forced||status,student_id:student,plan_id:plan})}`}><Download size={16}/>Exportar CSV</a></section>)}</div>}</PaginatedItems><Link className="text-link" to="/system?tab=tecnico">Sobre os formatos de exportação<ArrowUpRight size={14}/></Link></>;
+}
+export function Audit(){const [page,setPage]=useState(1),{data,loading,error,reload}=useApi(`/audit?page=${page}`);return <><PageHeader eyebrow="ACESSO & SEGURANÇA" title="Auditoria" description="Rastreabilidade das ações realizadas no sistema."/><section className="card">{loading?<Loading/>:error?<ErrorState message={error} retry={reload}/>:<div className="table-wrap"><table><thead><tr><th>Data / hora UTC</th><th>Usuário</th><th>Ação</th><th>Entidade</th><th>Registro</th><th>Resultado</th></tr></thead><tbody>{data.items.map(row=><tr key={row.id}><td>{date(row.created_at)} · {row.created_at.slice(11,19)}</td><td>#{row.user_id}</td><td>{row.action}</td><td>{row.entity}</td><td>#{row.entity_id}</td><td>{row.result}</td></tr>)}</tbody></table></div>}<Pagination page={page} total={data?.total} onChange={setPage} loading={loading||!!error} label="auditoria"/></section></>;}
+export function Batches(){return <><PageHeader eyebrow="FINANCEIRO & FISCAL" title="Emissão em lote" description="Preparação para operações fiscais em escala."/><section className="card future-card"><div className="large-icon"><Layers3 size={34}/></div><span className="badge">PREVISTO PARA V0.3.0</span><h2>Um fluxo de cada vez.</h2><p className="muted">A v0.1.0 implementa solicitações individuais com proteção contra duplicidade. Seleção de lotes, progresso e resultados por item serão implementados após consolidar o financeiro.</p><Link to="/charges" className="button">Emitir a partir de uma cobrança <ArrowUpRight size={16}/></Link></section></>;}

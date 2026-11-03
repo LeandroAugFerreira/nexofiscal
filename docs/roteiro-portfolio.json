@@ -1,0 +1,90 @@
+{
+  "resumo": [
+    {
+      "image": "central",
+      "title": "Suas notas, em um só lugar.",
+      "pt": "Clientes, serviços e emissão de notas, em um só lugar.",
+      "en": "Clients, services and invoicing, all in one place."
+    },
+    {
+      "image": "revisao",
+      "title": "Revise antes de emitir.",
+      "pt": "No Nexo Fiscal, você confere os dados antes de gerar o documento.",
+      "en": "NexoFiscal lets you review the details before generating the document."
+    },
+    {
+      "image": "documento",
+      "title": "Documento e histórico.",
+      "pt": "Explore o PDF com marca d’água, o histórico e as rotinas de automação.",
+      "en": "Explore the watermarked PDF, the history and the automation routines."
+    },
+    {
+      "image": "central",
+      "title": "Conheça o NexoFiscal.",
+      "pt": "Conheça o projeto completo. É uma demonstração, sem validade fiscal.",
+      "en": "Explore the full project. This is a demonstration with no tax validity."
+    }
+  ],
+  "apresentacao": [
+    {
+      "image": "central",
+      "title": "Emissão no centro da operação.",
+      "pt": "Este é o Nexo Fiscal. Um projeto de portfólio para organizar a emissão de notas de serviço, do cadastro do cliente ao documento.",
+      "en": "This is NexoFiscal, a portfolio project that organizes service invoicing, from client registration to the document."
+    },
+    {
+      "image": "clientes",
+      "title": "Clientes pessoa física e jurídica.",
+      "pt": "O cadastro atende pessoas físicas e jurídicas, de diferentes setores. Os dados usados nesta apresentação são fictícios.",
+      "en": "Clients can be individuals or businesses from different sectors. All data in this presentation is fictional."
+    },
+    {
+      "image": "servico",
+      "title": "Serviço, valor e competência.",
+      "pt": "Na emissão avulsa, você escolhe o serviço, informa o valor, a competência e a descrição. Não é preciso criar um contrato ou pagamento.",
+      "en": "For a standalone invoice, choose a service and enter the amount, reporting month and description. No contract or payment is required."
+    },
+    {
+      "image": "revisao",
+      "title": "Revise antes de emitir.",
+      "pt": "Antes de confirmar, revise os dados. O servidor confere o cliente e o serviço, e a solicitação tem proteção contra duplicidade.",
+      "en": "Review the details before confirming. The server checks the client and service, with duplicate protection for each request."
+    },
+    {
+      "image": "documento",
+      "title": "PDF com marca-d’água.",
+      "pt": "O documento pode ser consultado no sistema ou baixado em PDF. A marca d’água identifica a demonstração, que não possui validade fiscal.",
+      "en": "View the document in the system or download its PDF. The watermark identifies this as a demonstration with no tax validity."
+    },
+    {
+      "image": "email",
+      "title": "Entrega com PDF e permissões.",
+      "pt": "Administrador e Financeiro podem enviar o PDF por e-mail, quando o remetente está configurado. O visitante prepara uma mensagem, sem realizar envios.",
+      "en": "Administrators and Finance users can email the PDF when a sender is configured. Visitors can prepare a message, but cannot send it."
+    },
+    {
+      "image": "historico",
+      "title": "Rejeição e reprocessamento.",
+      "pt": "Também é possível simular uma rejeição, corrigir o problema e reprocessar. As tentativas ficam no histórico para acompanhar o resultado.",
+      "en": "You can also simulate a rejection, address the issue and retry. Each attempt stays in the history so its result can be reviewed."
+    },
+    {
+      "image": "automacoes",
+      "title": "Rotinas locais e n8n.",
+      "pt": "As seis rotinas ajudam a preparar entregas, conferir vencimentos e consolidar resultados. Elas funcionam localmente ou com uma conexão ao n oito n.",
+      "en": "Six routines help prepare deliveries, check due dates and consolidate results. They run locally or through an n8n connection."
+    },
+    {
+      "image": "usuarios",
+      "title": "Acesso por perfil.",
+      "pt": "Cada perfil tem suas permissões. A aplicação também oferece administração de usuários, atualização da conta e listas de cinco itens por página.",
+      "en": "Each role has its own permissions. The app also provides user management, account settings and lists with five items per page."
+    },
+    {
+      "image": "central",
+      "title": "Experimente a demonstração local.",
+      "pt": "Explore as telas e baixe o código para executar no computador. A emissão é simulada, sem transmissão para prefeituras ou autorização governamental.",
+      "en": "Explore the screens and download the source to run it locally. Invoicing is simulated, with no submission to municipalities or government authorization."
+    }
+  ]
+}

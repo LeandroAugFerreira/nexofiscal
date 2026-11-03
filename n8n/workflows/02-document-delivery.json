@@ -1,0 +1,98 @@
+{
+  "name": "NexoFiscal — Documento autorizado → preparar entrega",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none"
+  },
+  "nodes": [
+    {
+      "id": "webhook",
+      "name": "Receber solicitação",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "nexofiscal-document-delivery",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nexofiscal-document-delivery",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "NexoFiscal Internal Token"
+        }
+      }
+    },
+    {
+      "id": "run",
+      "name": "Executar rotina no NexoFiscal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://backend:8000/api/automation/run/document-delivery",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "={{ $json.headers[\"idempotency-key\"] || (\"n8n-\" + $execution.id + \"-document-delivery\") }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ charge_id: $json.body.charge_id, invoice_id: $json.body.invoice_id, competence: $json.body.competence, days: $json.body.days }) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "NexoFiscal Internal Token"
+        }
+      }
+    },
+    {
+      "id": "notice",
+      "name": "Configuração e limites",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -270
+      ],
+      "parameters": {
+        "content": "## NexoFiscal — demonstração\nConfere o PDF e prepara os dados para baixar a mensagem. O envio de e-mail continua manual.\nConfigure a credencial Header Auth NexoFiscal Internal Token (X-Automation-Token) nos dois nodes. Ative a rotina no sistema. Não envia e-mails nem documentos fiscais oficiais.",
+        "width": 620,
+        "height": 220
+      }
+    }
+  ],
+  "connections": {
+    "Receber solicitação": {
+      "main": [
+        [
+          {
+            "node": "Executar rotina no NexoFiscal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

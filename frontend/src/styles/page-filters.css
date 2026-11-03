@@ -1,0 +1,17 @@
+.page-filterbar:empty{display:none}
+.page-filterbar:not(:empty){padding:14px 0 16px;border-top:1px solid var(--border)}
+.page-fixed:has(.page-filterbar:not(:empty)){padding-bottom:0}
+.page-fixed:has(.page-tabbar:empty):has(.page-filterbar:not(:empty)) .page-head{margin-bottom:16px}
+:root .page-filters :is(.table-toolbar,.fiscal-filters,.report-filters){padding:0;margin:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.page-filters .table-toolbar{flex-wrap:wrap;gap:10px}
+.page-filters .field{margin:0;min-width:0}
+.page-filters .search-box{min-width:0}
+.page-filters .fiscal-filters .search-box{min-width:235px}
+.automation-history-filters .field{width:min(100%,240px)}
+@media(max-width:700px){
+  .page-filterbar:not(:empty){padding:12px 0}
+  .page-filters .table-toolbar .search-box,.page-filters .fiscal-filters .search-box{width:100%;min-width:100%}
+  .page-filters .table-toolbar>select{flex:1;min-width:0;width:auto}
+  .page-filters .report-filters{gap:10px}
+  .page-fixed:has(.page-tabbar:empty):has(.page-filterbar:not(:empty)) .page-head{margin-bottom:12px}
+}

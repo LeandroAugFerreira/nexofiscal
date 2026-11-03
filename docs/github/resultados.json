@@ -1,0 +1,20 @@
+{
+  "project": "nexofiscal",
+  "backend_exit": 0,
+  "frontend": [
+    {
+      "script": "build",
+      "exit_code": 0,
+      "seconds": 33.62
+    }
+  ],
+  "application_logic_modified": false,
+  "original_files_modified": false,
+  "backend_latest": {
+    "tests": 60,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "tests_label": "60 aprovados"
+}

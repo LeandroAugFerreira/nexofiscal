@@ -1,0 +1,13 @@
+{
+  "build": "passed",
+  "capture": "passed",
+  "pytest": "passed",
+  "alembic": "passed",
+  "date": "2026-10-18",
+  "database": "SQLite isolado, criado pelo setup",
+  "smtp": "desabilitado; endpoint de envio bloqueado na captura",
+  "ports": [
+    8012,
+    5182
+  ]
+}

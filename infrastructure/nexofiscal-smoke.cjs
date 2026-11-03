@@ -1,0 +1,41 @@
+const {chromium}=require(process.env.FITNOTA_PLAYWRIGHT_MODULE||'playwright');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');const path=require('node:path');
+const root=path.resolve(__dirname,'..'),base='http://127.0.0.1:5180',demo=JSON.parse(fs.readFileSync(path.join(root,'artifacts','nexofiscal-demo.json'),'utf8'));
+let browser;
+(async()=>{
+  browser=await chromium.launch({headless:true,channel:'msedge'});
+  const page=await browser.newPage({viewport:{width:1600,height:1000},locale:'pt-BR'});
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(base);await page.getByRole('button',{name:'Entrar no portfólio',exact:true}).click();
+  await page.getByRole('heading',{name:'Central de emissão',exact:true}).waitFor();
+  assert((await page.locator('.brand').innerText()).includes('NexoFiscal'));
+  assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
+  await page.screenshot({path:path.join(root,'artifacts','screenshots','nexofiscal-central.png'),fullPage:true});
+  await page.goto(base+'/fiscal-config');await page.getByRole('heading',{name:'Configuração fiscal',exact:true}).waitFor();
+  await page.getByRole('tab',{name:'E-mail',exact:true}).click();
+  await page.getByRole('heading',{name:'Entrega por e-mail',exact:true}).waitFor();
+  await page.screenshot({path:path.join(root,'artifacts','screenshots','nexofiscal-configuracao.png'),fullPage:true});
+  await page.goto(base+`/invoices/${demo.invoice_id}`);await page.getByRole('heading',{name:'Documento demonstrativo',exact:true}).waitFor();
+  const frame=page.frameLocator('iframe[title="Documento simulado da NFS-e"]');
+  await frame.getByRole('heading',{name:'PRESTADOR / EMITENTE',exact:true}).waitFor();
+  assert(await frame.locator('.watermark').isVisible());
+  assert((await frame.locator('.watermark').innerText()).includes('DEMONSTRAÇÃO'));
+  const pdf=await page.request.get(base+`/api/invoices/${demo.invoice_id}/pdf`);assert.equal(pdf.status(),200);
+  await page.getByRole('button',{name:'E-mail',exact:true}).click();
+  assert(await page.getByRole('button',{name:'Enviar e-mail',exact:true}).isDisabled());
+  await page.getByRole('tab',{name:'Avançado',exact:true}).click();
+  const [file]=await Promise.all([page.waitForEvent('download'),page.getByRole('button',{name:'Baixar mensagem (.eml)',exact:true}).click()]);
+  await file.saveAs(path.join(root,'output','email','nexofiscal-mensagem-demonstracao.eml'));
+  await page.getByRole('button',{name:'Fechar janela',exact:true}).click();
+  await page.screenshot({path:path.join(root,'artifacts','screenshots','nexofiscal-nota.png'),fullPage:true});
+  await page.setViewportSize({width:390,height:844});await page.goto(base+'/fiscal-config');await page.getByRole('heading',{name:'Configuração fiscal',exact:true}).waitFor();
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),'Configuração móvel com overflow');
+  await page.goto(base);await page.getByRole('heading',{name:'Central de emissão',exact:true}).waitFor();
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),'Central móvel com overflow');
+  for(const [value,label] of [['dark','Dark'],['fitness','Contraste'],['light','Light']]){
+    await page.getByRole('button',{name:`Tema ${label}`,exact:true}).click();assert.equal(await page.locator('html').getAttribute('data-theme'),value);
+  }
+  await page.getByRole('button',{name:'Sair',exact:true}).click();await page.getByRole('heading',{name:'Vamos começar?',exact:true}).waitFor();
+  assert.deepEqual(errors,[]);console.log('NexoFiscal UI PASS: marca empresarial, tema claro, configurações, documento com marca-d’água, PDF, mensagem com anexo, bloqueio de envio público, mobile, temas e logout.');
+})().finally(async()=>{if(browser)await browser.close();}).catch(e=>{console.error(e);process.exitCode=1;});

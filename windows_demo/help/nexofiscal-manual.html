@@ -1,0 +1,50 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Manual do NexoFiscal 0.1.0 | Leandro Augusto Ferreira</title><meta name="description" content="Guia de uso e roteiro rápido de avaliação do projeto NexoFiscal. Por Leandro Augusto Ferreira."><meta name="author" content="Leandro Augusto Ferreira"><meta name="theme-color" content="#081827"><link rel="canonical" href="https://leandroaugferreira.github.io/nexofiscal-manual.html"><meta property="og:type" content="website"><meta property="og:title" content="Manual do NexoFiscal 0.1.0"><meta property="og:description" content="Guia de uso e roteiro rápido de avaliação do projeto NexoFiscal. Por Leandro Augusto Ferreira."><meta property="og:url" content="https://leandroaugferreira.github.io/nexofiscal-manual.html"><meta property="og:image" content="https://leandroaugferreira.github.io/img/nexofiscal-central.png"><meta name="twitter:card" content="summary_large_image"><link rel="stylesheet" href="assets/project-standard.css?v=10e7f4dab0f4"></head><body class="case-guide" style="--project-accent:#235f88"><a class="case-skip" href="#conteudo">Pular para o conteúdo</a><nav class="case-shell case-nav" aria-label="Navegação do projeto"><a href="https://leandroaugferreira.github.io/#nexofiscal">← Portfólio</a><div><a href="https://leandroaugferreira.github.io/nexofiscal.html">O projeto</a><a href="nexofiscal-manual.html" aria-current="page">Manual online ↗</a><a href="https://leandroaugferreira.github.io/nexofiscal.html#download">Aplicativo Windows</a></div></nav><main class="case-shell" id="conteudo"><header class="case-guide-heading"><p class="case-eyebrow">NexoFiscal / GUIA DE USO</p><h1>Manual do NexoFiscal 0.1.0</h1><p>Comece pelo roteiro rápido. Depois, conheça os recursos e os pontos de implementação que ajudam a avaliar o projeto.</p><a class="case-button case-primary" href="https://leandroaugferreira.github.io/nexofiscal.html#download">Ir para o download do aplicativo →</a></header><div class="case-guide-layout"><aside class="case-guide-index" aria-label="Índice do guia"><p class="case-eyebrow">NESTE GUIA</p><a href="#o-que-este-projeto-resolve">O que este projeto resolve</a><a href="#baixe-e-abra-o-aplicativo">Baixe e abra o aplicativo</a><a href="#entre-no-portfolio">Entre no portfólio</a><a href="#roteiro-de-cinco-minutos">Roteiro de cinco minutos</a><a href="#clientes-e-revisao">Clientes e revisão</a><a href="#documento-e-historico">Documento e histórico</a><a href="#e-mail-e-automacoes">E-mail e automações</a><a href="#continuidade-e-encerramento">Continuidade e encerramento</a><a href="#para-quem-avalia-o-desenvolvimento">Para quem avalia o desenvolvimento</a></aside><article class="case-guide-content" aria-label="Manual de NexoFiscal"><p>Explore a jornada entre cadastrar um cliente, revisar um serviço e gerar um documento demonstrativo. Nenhuma emissão desta demonstração possui validade fiscal.</p>
+<h2 id="o-que-este-projeto-resolve">O que este projeto resolve</h2>
+<p>O NexoFiscal organiza o fluxo <strong>cliente → serviço e valor → revisão → documento e histórico</strong>. O projeto atende à demonstração de serviços de diferentes segmentos, com clientes pessoa física e jurídica.</p>
+<p>É uma aplicação de portfólio com emissão simulada. Não transmite notas à prefeitura nem recebe autorização governamental. O PDF gerado pelo aplicativo mantém a identificação de demonstração.</p>
+<h2 id="baixe-e-abra-o-aplicativo">Baixe e abra o aplicativo</h2>
+<ol>
+<li>Na página do projeto, baixe <strong>NexoFiscal.exe</strong> para Windows de 64 bits.</li>
+<li>Abra o arquivo e aguarde a janela indicar que está pronto.</li>
+<li>O aplicativo abre no navegador. Se isso não acontecer, clique em <strong>Abrir NexoFiscal</strong>.</li>
+<li>Mantenha a janela do aplicativo aberta durante o uso.</li>
+</ol>
+<p>O executável inclui a interface, a API e os recursos necessários para a demonstração. Não exige instalação de Python, Node.js, Docker ou n8n. A primeira execução cria uma base fictícia própria no seu computador.</p>
+<p>Se a política do computador impedir a abertura, confira a origem do arquivo e procure o responsável pelo equipamento. Você também pode conhecer o projeto pelos vídeos e pelas telas da página.</p>
+<h2 id="entre-no-portfolio">Entre no portfólio</h2>
+<p>Na tela de login, escolha <strong>Entrar no portfólio</strong>. O executável prepara essa conta automaticamente.</p>
+<ul>
+<li><strong>E-mail público:</strong> <code>portfolio@nexofiscal.example.com</code></li>
+<li><strong>Senha de demonstração:</strong> <code>NexoFiscalDemo@2026</code></li>
+</ul>
+<p>O perfil permite explorar a emissão simulada e preparar uma mensagem de e-mail, mas não envia mensagens reais. A instalação inicia sem remetente SMTP e sem conexão n8n.</p>
+<p>Para avaliar a administração com dados fictícios, a edição local também mantém a conta demonstrativa <code>admin@nexofiscal.example.com</code>, com senha pública <code>Adm@2026</code>. Essas contas são exclusivas da demonstração e não devem ser usadas para uma operação real.</p>
+<h2 id="roteiro-de-cinco-minutos">Roteiro de cinco minutos</h2>
+<ol>
+<li>Abra <strong>Sobre e demonstração → Demonstração</strong>.</li>
+<li>Escolha um exemplo de pessoa física, pessoa jurídica ou rejeição. A escolha preenche um exemplo; ainda não emite um documento.</li>
+<li>Em <strong>Emitir NFS-e</strong>, percorra cliente, serviço, valor e revisão.</li>
+<li>Confira a revisão pelo servidor e escolha <strong>Emitir NFS-e simulada</strong>.</li>
+<li>Abra o resultado, consulte o histórico e baixe o PDF demonstrativo.</li>
+</ol>
+<p>Listas e históricos usam cinco itens por página. Os filtros ajudam a localizar registros; limpar ou alterar um filtro pode mudar o conjunto de resultados exibido.</p>
+<h2 id="clientes-e-revisao">Clientes e revisão</h2>
+<p>O cadastro distingue pessoas físicas e jurídicas e valida os campos solicitados. Use os exemplos fictícios incluídos para avaliar o fluxo sem inserir dados reais.</p>
+<p>A emissão avulsa permite selecionar um cliente e um serviço, informar valor, competência e descrição e revisar os dados antes da confirmação. Ela não exige criar um contrato, uma cobrança ou um pagamento apenas para gerar a nota simulada.</p>
+<p>Os campos e as mensagens de revisão ajudam a identificar uma pendência antes da emissão. Se uma operação for recusada por conflito ou repetição, confira o estado do documento antes de tentar novamente.</p>
+<h2 id="documento-e-historico">Documento e histórico</h2>
+<p>No detalhe da nota, consulte <strong>Documento</strong>, <strong>Dados da nota</strong> e <strong>Histórico fiscal</strong>. O exemplo de rejeição permite acompanhar o reprocessamento e suas tentativas.</p>
+<p>O PDF, a visualização HTML e o XML demonstrativo representam a mesma operação simulada. A marca-d’água e os identificadores deixam esse escopo explícito. O arquivo XML é próprio da demonstração; não representa integração oficial com uma prefeitura.</p>
+<p>O cancelamento de exemplo também é simulado e permanece registrado no histórico.</p>
+<h2 id="e-mail-e-automacoes">E-mail e automações</h2>
+<p>Na área <strong>E-mail</strong>, o visitante pode usar <strong>Avançado → Baixar mensagem (.eml)</strong> para preparar uma mensagem com o PDF anexo. Preparar o arquivo não equivale a enviar um e-mail.</p>
+<p>O envio real exige perfil autorizado e uma conta remetente configurada pelo operador. Nenhuma conta Gmail, senha SMTP ou credencial do autor acompanha o download. Para a avaliação inicial, mantenha a demonstração sem remetente.</p>
+<p>A central reúne seis rotinas locais relacionadas a emissão, preparação de entrega, lembretes, falhas, fechamento e alertas. A integração com n8n é opcional e não é iniciada pelo executável de demonstração.</p>
+<h2 id="continuidade-e-encerramento">Continuidade e encerramento</h2>
+<p>As alterações confirmadas ficam na base local. A próxima abertura reutiliza a mesma instalação, sem copiar o banco do autor ou apagar seu progresso.</p>
+<p>O botão <strong>Pasta de dados</strong> abre <code>%LOCALAPPDATA%\NexoFiscal\0.1-demo</code>. Essa pasta contém dados e configuração da sua instalação. Encerre o aplicativo antes de fazer uma cópia de segurança e não publique essa pasta.</p>
+<p>Use a opção de sair da conta e, depois, <strong>Encerrar</strong> na janela do NexoFiscal. Fechar somente a aba do navegador não encerra a API local.</p>
+<h2 id="para-quem-avalia-o-desenvolvimento">Para quem avalia o desenvolvimento</h2>
+<p>O projeto usa <strong>React, FastAPI, Python, SQLAlchemy, SQLite e Alembic</strong>, com geração de PDF e preparação de mensagens com anexo. Há configuração opcional de automações n8n.</p>
+<p>Observe a revisão no servidor, a proteção contra emissão duplicada, os perfis de acesso, as transações e o histórico das tentativas. A proposta é mostrar uma jornada completa e rastreável, mantendo clara a diferença entre simulação e integração fiscal oficial.</p>
+<p>Código-fonte, manifesto de integridade e apresentação estão disponíveis na página do projeto. A demonstração Windows não constitui liberação para emissão fiscal real.</p></article></div></main><footer class="case-footer"><div class="case-shell"><div class="case-signature"><span class="case-monogram" aria-hidden="true">lf.</span><span><small>DESIGN & DESENVOLVIMENTO</small><b>Leandro Augusto Ferreira</b></span></div><p>NexoFiscal · Projeto de portfólio · <a href="https://leandroaugferreira.github.io/#projetos">Outros projetos</a></p></div></footer></body></html>

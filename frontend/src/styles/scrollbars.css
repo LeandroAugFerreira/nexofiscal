@@ -1,0 +1,33 @@
+/* Escala natural da interface; o zoom continua sob controle do navegador. */
+:root{--scroll-thumb:#899ab2;--scroll-thumb-hover:#637891}
+:root[data-theme='dark']{--scroll-thumb:#52657f;--scroll-thumb-hover:#7489a5}
+:root[data-theme='fitness']{--scroll-thumb:#65768e;--scroll-thumb-hover:#3c506b}
+.sidebar{--scroll-thumb:#526d8e;--scroll-thumb-hover:#829ab8}
+:where(.app-shell,.app-shell *,.modal,.modal *){
+  scrollbar-width:thin;
+  scrollbar-color:var(--scroll-thumb) transparent;
+}
+:where(.app-shell,.app-shell *,.modal,.modal *)::-webkit-scrollbar{width:10px;height:10px}
+:where(.app-shell,.app-shell *,.modal,.modal *)::-webkit-scrollbar-track{background:transparent}
+:where(.app-shell,.app-shell *,.modal,.modal *)::-webkit-scrollbar-thumb{
+  background:var(--scroll-thumb);border:2px solid transparent;border-radius:10px;background-clip:padding-box;
+}
+:where(.app-shell,.app-shell *,.modal,.modal *)::-webkit-scrollbar-thumb:hover{background-color:var(--scroll-thumb-hover)}
+:where(.app-shell,.app-shell *,.modal,.modal *)::-webkit-scrollbar-corner{background:transparent}
+.sidebar nav{min-height:0;overflow-x:hidden;overscroll-behavior:contain}
+.sidebar .brand,.sidebar .workspace,.sidebar-footer{flex-shrink:0}
+.section-tabs{overflow-y:hidden;overscroll-behavior-x:contain}
+.table-wrap{overscroll-behavior-x:contain}
+/* Evita que o cabeçalho consuma espaço excessivo em notebooks a 100%. */
+@media(min-width:701px) and (max-height:800px){
+  .main-shell{--page-gutter:24px}
+  .page-fixed{padding-top:16px}
+  .page-fixed .environment-strip{margin-bottom:10px}
+  .page-fixed .eyebrow{margin-bottom:4px}
+  .page-fixed .page-head{margin-bottom:12px}
+  .page-fixed:has(.page-tabbar:empty){padding-bottom:12px}
+  .page-content{padding-top:20px;padding-bottom:28px}
+}
+@media(forced-colors:active){
+  :where(.app-shell,.app-shell *,.modal,.modal *){scrollbar-color:auto}
+}

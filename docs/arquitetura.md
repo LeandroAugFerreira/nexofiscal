@@ -1,0 +1,17 @@
+# Arquitetura v0.1.0
+
+React/Vite → `/api` (proxy Vite ou Nginx) → FastAPI → SQLAlchemy → PostgreSQL no Docker. SQLite é uma alternativa explícita para desenvolvimento local e testes, não substitui os testes de PostgreSQL antes de implantação.
+
+`app/api/routes` trata HTTP e RBAC; `schemas` valida entradas; `repositories` aplica escopo de academia, serialização e auditoria; `services` concentra regras financeiras e fiscais; `fiscal/adapters` contém o simulador e contratos de evolução; `automations` encaminha eventos internos. Models usam índices, FKs, unicidade, checks e `Numeric(12,2)`. Migração Alembic é versionada; a API não executa `create_all` nem seed.
+
+Valores são `Decimal` no backend e strings decimais no JSON. O frontend converte para Number somente para exibir e desenhar gráficos; campos monetários são transmitidos como strings. O valor contratado é capturado na contratação. Não há exclusão física de aluno, plano ou serviço pela API.
+
+Sessões opacas aleatórias ficam em cookie HttpOnly/SameSite=Lax. O banco guarda SHA-256 do token, com expiração de oito horas e revogação no logout. Token CSRF fica em memória no React, obtido por `/auth/me`, obrigatório em todas as mutações autenticadas. Temas são a única preferência persistida em localStorage. Login verifica origem e limita tentativas por IP em memória; o limite é adequado ao processo único local, não uma defesa distribuída. Cookies Secure devem ser ativados com HTTPS antes de qualquer implantação.
+
+RBAC: administrador tem gestão; financeiro registra cadastros e financeiro/emissão simulada; recepção gerencia alunos e consulta; contabilidade consulta, emite simulações e vê auditoria. Cancelamento fiscal e configurações são exclusivos do administrador. Listas mascaram CPF; detalhes completos somente para perfis que gerenciam alunos. Dados não têm criptografia de campo nesta versão; aplique controle de acesso ao banco, TLS e retenção antes de dados reais. A aplicação guarda `academy_id` em entidades centrais, mas não tem seleção multiempresa nem cadastro de empresas na interface.
+
+Pagamentos usam update condicional atômico no saldo, bloqueio de linha quando PostgreSQL permite e chave idempotente única; emissão bloqueia cobrança, verifica unicidade por cobrança/chave e persiste resultado, documento e eventos na mesma transação. Em conflito concorrente, a API devolve 409 sem repetir ações: o cliente deve consultar o estado e repetir a mesma chave quando apropriado. O simulador síncrono não transmite a serviços externos. Integrações oficiais exigirão outbox, filas e reconciliação de resultados desconhecidos.
+
+n8n não consulta o banco nem possui credenciais fiscais. Só recebe token interno limitado às rotas de automação. Na v0.1 a identidade técnica utiliza o administrador do seed da academia única; substituir por conta de serviço com escopos dedicados antes de multiempresa/produção. URL de conexão só é configurada pelo operador no backend. A v0.1 não encaminha pagamentos automaticamente; um operador dispara o evento demonstrativo na página Cobranças.
+
+O frontend é responsivo e compartilha tokens CSS, componentes, layout e formulários. A referência visual fornecida pelo usuário orienta cores, densidade, menu, cards e tabelas. Indicadores temporais comparativos não são inventados; cartões exibem visão acumulada. Tabelas permitem rolagem interna em telas estreitas, evitando rolagem horizontal da página. Tauri é evolução futura; frontend consome somente API e pode ser empacotado depois, sem expor banco ou adaptadores fiscais ao desktop.

@@ -1,0 +1,12 @@
+.pagination{gap:12px;flex-wrap:wrap;min-width:0}
+.pagination>span{white-space:normal;line-height:1.7}
+.pagination>.pagination-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
+.pagination .page-number{min-width:32px;padding:6px 9px}
+.pagination .page-number[aria-current='page']{background:var(--accent-tint);border-color:var(--accent);color:var(--accent);opacity:1}
+.pagination-gap{padding:0 3px;color:var(--muted)}
+.routine-result-items{max-height:none;overflow:visible}
+@media(max-width:700px){
+  .pagination{padding:14px;align-items:flex-start}
+  .pagination>.pagination-controls{gap:5px}
+  .pagination .button{font-size:10px;padding:6px 9px}
+}
