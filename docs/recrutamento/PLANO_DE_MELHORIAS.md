@@ -21,7 +21,7 @@
 
 O tour estático em https://leandroaugferreira.github.io/nexofiscal-demo.html mostra: prévia → emissão fictícia → replay → rejeição/retry → cancelamento, sem backend, contas ou dado pessoal. Recrutadores podem acompanhar pelo celular, abrir o código e conferir testes.
 
-**Não hospedar a aplicação original para visitantes neste estado.** \`portfolio\` herda permissões amplas, as credenciais demo podem ser expostas quando o modo é habilitado, e o cookie Secure precisa de configuração. Para uma eventual demo real, criar tenant efêmero, roles estritas, HTTPS, expurgo, rate limit, observabilidade segura, dados totalmente fictícios, provedores externos desligados e testes independentes de segurança. Nunca reutilizar banco, documentos ou contas pessoais.
+**Não hospedar a aplicação original para visitantes neste estado.** `portfolio` herda permissões amplas, as credenciais demo podem ser expostas quando o modo é habilitado, e o cookie Secure precisa de configuração. Para uma eventual demo real, criar tenant efêmero, roles estritas, HTTPS, expurgo, rate limit, observabilidade segura, dados totalmente fictícios, provedores externos desligados e testes independentes de segurança. Nunca reutilizar banco, documentos ou contas pessoais.
 
 ## Não comprovado
 
@@ -32,3 +32,7 @@ Não existe integração nacional/municipal oficial, certificação, protocolo d
 Primeiro, corrigir segurança e adicionar teste de navegador completo; depois, PostgreSQL e testes de integração por organização. O retorno para recrutadores tende a ser maior que acrescentar telas sem prova de funcionamento.
 
 [Auditoria](AUDITORIA.md) · [Evidências](EVIDENCIAS.md) · [Roteiro](ROTEIRO_DEMO.md).
+
+## Progresso comprovado — 08/11/2026
+
+Três novos testes backend aprovados com a suíte de 63; tour estático adicionado ao portfólio, sem backend público; smoke Chromium **aprovado** no [run #42533982058](https://github.com/LeandroAugFerreira/nexofiscal/actions/runs/42533982058), cobrindo login, Central e tela de emissão. Teste completo de processamento por cliques e segurança da conta pública permanecem pendentes.

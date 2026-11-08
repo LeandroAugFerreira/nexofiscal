@@ -10,7 +10,7 @@ Abra [página do NexoFiscal](https://leandroaugferreira.github.io/nexofiscal.htm
 
 ## 00:25–01:05 — Prévia e emissão fictícia
 
-Abra [demonstração interativa](https://leandroaugferreira.github.io/nexofiscal-demo.html). Escolha PJ ou PF, cenário de autorização, clique em Prévia e Simular emissão. Observe \`SIM-DEMO-001\` e aviso “DOCUMENTO SIMULADO — SEM VALIDADE FISCAL”.
+Abra [demonstração interativa](https://leandroaugferreira.github.io/nexofiscal-demo.html). Escolha PJ ou PF, cenário de autorização, clique em Prévia e Simular emissão. Observe `SIM-DEMO-001` e aviso “DOCUMENTO SIMULADO — SEM VALIDADE FISCAL”.
 
 **Fala:** “No backend verdadeiro, cliente e serviço precisam estar ativos, o documento PF/PJ passa por validação, e valor e competência são conferidos antes de gravar Invoice. Esta página apenas representa o resultado.”
 
@@ -24,7 +24,7 @@ Abra [teste real](../../backend/tests/test_recruiting_case.py).
 
 ## 01:35–02:05 — Rejeição/reprocessamento
 
-Reinicie, selecione Rejeição simulada, clique Prévia e Emissão e depois Reprocessar. Explique que o status \`autorizada\` agora é **interno**, não aprovação da prefeitura. Mostre Cancelar e os eventos históricos.
+Reinicie, selecione Rejeição simulada, clique Prévia e Emissão e depois Reprocessar. Explique que o status `autorizada` agora é **interno**, não aprovação da prefeitura. Mostre Cancelar e os eventos históricos.
 
 **Fala:** “Eu preservei histórico de tentativas e não permito reprocessar uma nota que já não esteja rejeitada. Cancelamento exige uma nota simulada autorizada.”
 

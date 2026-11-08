@@ -63,17 +63,17 @@ stateDiagram-v2
   cancelamento_solicitado --> cancelada: simulador conclui
 ~~~
 
-**Importante:** todos os estados são da própria aplicação. \`autorizada\` não significa aprovação por prefeitura nem geração de NFS-e válida.
+**Importante:** todos os estados são da própria aplicação. `autorizada` não significa aprovação por prefeitura nem geração de NFS-e válida.
 
 ## Persistência
 
-Entidades reais em [entities.py](../../backend/app/models/entities.py): \`Invoice\`, \`FiscalEvent\`, \`FiscalConfig\`, \`Student\` (cliente legado), \`Service\`, \`AuthSession\`, \`Charge\`, \`Payment\`, \`EmailDelivery\`, \`Audit\`. Uso de Alembic para mudanças de schema; SQLite nos testes atuais, PostgreSQL/Compose declarados, não homologados no CI desta revisão.
+Entidades reais em [entities.py](../../backend/app/models/entities.py): `Invoice`, `FiscalEvent`, `FiscalConfig`, `Student` (cliente legado), `Service`, `AuthSession`, `Charge`, `Payment`, `EmailDelivery`, `Audit`. Uso de Alembic para mudanças de schema; SQLite nos testes atuais, PostgreSQL/Compose declarados, não homologados no CI desta revisão.
 
 ## Separação de responsabilidades
 
 - [API](../../backend/app/api/routes/fiscal_center.py) — endpoints de prévia, emissão e cenários.
 - [Serviço](../../backend/app/services/fiscal.py) — regras de elegibilidade, idempotência, estados e eventos.
-- [Simulador](../../backend/app/fiscal/adapters/simulator.py) — identificador \`SIM-\` e geração demonstrativa.
+- [Simulador](../../backend/app/fiscal/adapters/simulator.py) — identificador `SIM-` e geração demonstrativa.
 - [Adaptadores oficiais](../../backend/app/fiscal/adapters/official.py) — contratos **não implementados**.
 - [Documentos](../../backend/app/fiscal/documents.py) — snapshots, HTML/PDF/XML com avisos.
 - [Segurança](../../backend/app/security/auth.py) — sessão, CSRF, perfis.

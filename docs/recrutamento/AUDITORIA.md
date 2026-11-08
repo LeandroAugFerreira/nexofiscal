@@ -1,6 +1,6 @@
 # NexoFiscal — auditoria técnica para recrutamento
 
-**Referência:** código original em \`main\`, commit \`da74b8114d322e1abeeec1533d6f50532b3c46c0\` (08/11/2026). **Escopo:** leitura de módulos-chave e execução de três novos testes de integração. Não é pentest, avaliação fiscal oficial nem homologação governamental.
+**Referência:** código original em `main`, commit `da74b8114d322e1abeeec1533d6f50532b3c46c0` (08/11/2026). **Escopo:** leitura de módulos-chave e execução de três novos testes de integração. Não é pentest, avaliação fiscal oficial nem homologação governamental.
 
 ## Avaliação profissional
 
@@ -38,17 +38,17 @@ A inspeção não cobriu exaustivamente todas as dependências, a infraestrutura
 **Observável:** senha Argon2, sessão aleatória persistida como hash, cookie HttpOnly/SameSite, CSRF exigido em mutações, autorização por papel, escopo de organização no repositório e bloqueio de envio SMTP para conta de portfólio. Os testes existentes cobrem parte desses controles; isso não equivale a pentest.
 
 **Riscos prioritários a investigar antes de qualquer backend público:**
-- A conta \`portfolio\` recebe praticamente todas as permissões do administrador, exceto \`email_send\`. Mesmo com dados fictícios, isso é **escopo de escrita amplo demais** para visitantes de demonstração. Avaliar política de menor privilégio, reset entre visitantes e segregação de tenant.
-- [config.py](../../backend/app/core/config.py) inclui senha de portfólio demonstrativa de valor padrão, \`cookie_secure=False\` por padrão e banco SQLite local. Configurações são aceitáveis apenas em contexto local isolado com medidas complementares, **não** como defaults para público.
-- \`GET /api/auth/portfolio\` pode devolver credenciais explícitas quando habilitado; não disponibilizar esse fluxo num ambiente de produção.
+- A conta `portfolio` recebe praticamente todas as permissões do administrador, exceto `email_send`. Mesmo com dados fictícios, isso é **escopo de escrita amplo demais** para visitantes de demonstração. Avaliar política de menor privilégio, reset entre visitantes e segregação de tenant.
+- [config.py](../../backend/app/core/config.py) inclui senha de portfólio demonstrativa de valor padrão, `cookie_secure=False` por padrão e banco SQLite local. Configurações são aceitáveis apenas em contexto local isolado com medidas complementares, **não** como defaults para público.
+- `GET /api/auth/portfolio` pode devolver credenciais explícitas quando habilitado; não disponibilizar esse fluxo num ambiente de produção.
 - Há rotinas de SMTP/n8n capazes de causar efeitos externos se configuradas; não ativá-las por conveniência de uma demo.
 - Testes ainda não validam PostgreSQL, varredura de dependências, rate limit distribuído, isolamento real entre visitantes ou deployments HTTPS.
 
-**Restrição absoluta:** não chamar PDF/XML simulado de NFS-e válida, não sugerir transmissão real, não alegar cálculos fiscais oficiais e não apresentar os adaptadores \`NotImplemented\` como integrações concluídas.
+**Restrição absoluta:** não chamar PDF/XML simulado de NFS-e válida, não sugerir transmissão real, não alegar cálculos fiscais oficiais e não apresentar os adaptadores `NotImplemented` como integrações concluídas.
 
 ## Verificações realizadas
 
-[CI #42533352657](https://github.com/LeandroAugFerreira/nexofiscal/actions/runs/42533352657): **63 testes backend aprovados**, um warning, e **build React/Vite aprovado** após incluir três testes. Todos os dados foram sintéticos, SMTP e n8n desativados. O CI não inclui Playwright real nesta execução.
+[CI #42533352657](https://github.com/LeandroAugFerreira/nexofiscal/actions/runs/42533352657): **63 testes backend aprovados**, um warning, e **build React/Vite aprovado** após incluir três testes. Todos os dados foram sintéticos, SMTP e n8n desativados. O CI inicial não incluía Playwright; um smoke Chromium foi **aprovado** no [run #42533982058](https://github.com/LeandroAugFerreira/nexofiscal/actions/runs/42533982058), verificando login, Central e abertura da página de emissão, sem emitir pela interface.
 
 ## Recomendações para recrutadores
 
