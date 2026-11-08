@@ -32,3 +32,5 @@ artifacts/portfolio-demo/
 *.db-shm
 *.sqlite-wal
 *.sqlite-shm
+# Capturas locais de navegador com dados sintéticos
+artifacts/browser/

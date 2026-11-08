@@ -118,3 +118,13 @@ A escolha de licença depende da aprovação do autor; nenhuma licença nova foi
 ## 15. Portfólio
 
 [NexoFiscal no portfólio](https://leandroaugferreira.github.io/nexofiscal.html) · [Portfólio completo](https://leandroaugferreira.github.io/).
+
+## 16. Estudo de caso para recrutamento
+
+- [Auditoria técnica](docs/recrutamento/AUDITORIA.md), [arquitetura Mermaid](docs/recrutamento/ARQUITETURA.md), [estudo de caso](docs/recrutamento/ESTUDO_DE_CASO.md), [15 perguntas técnicas](docs/recrutamento/ENTREVISTA_TECNICA.md) e [roteiro de 3 minutos](docs/recrutamento/ROTEIRO_DEMO.md).
+- [Tour interativo estático](https://leandroaugferreira.github.io/nexofiscal-demo.html): prévia, emissão fictícia, replay, rejeição, retry e cancelamento. **Não** usa API, banco, prefeitura, SMTP ou n8n.
+- [Três novos testes de integração](backend/tests/test_recruiting_case.py): validação/documentos demonstrativos, idempotência/estados e perfis. [63 pytest + build React aprovados](https://github.com/LeandroAugFerreira/nexofiscal/actions/runs/42533352657).
+- [Chromium Playwright aprovado](https://github.com/LeandroAugFerreira/nexofiscal/actions/runs/42533982058): login real, Central de emissão autenticada e tela de nova solicitação em banco SQLite efêmero, sem emitir documento pela interface.
+- [Resultados e limitações](docs/recrutamento/EVIDENCIAS.md) · [Plano de evolução](docs/recrutamento/PLANO_DE_MELHORIAS.md).
+
+**Importante:** a conta `portfolio` da API ainda recebe permissões de escrita amplas, embora `email_send` esteja desabilitado. **Não publicar o backend publicamente** sem limitar permissões, isolamento de dados e outras medidas de segurança. O NexoFiscal **não emite NFS-e válida** e os adaptadores oficiais não estão implementados.
