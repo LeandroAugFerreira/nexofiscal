@@ -62,7 +62,7 @@ def main() -> None:
             "DATABASE_URL": "sqlite:///" + (Path(temporary) / "nexofiscal-qa.sqlite").as_posix(),
             "DEMO_PASSWORD": password,
             "DEMO_ADMIN_PASSWORD": password,
-            "DEMO_EMAIL": "avaliador@teste.invalid",
+            "DEMO_EMAIL": "avaliador@example.com",
             "PORTFOLIO_ENABLED": "false",
             "AUTOMATION_TOKEN": "",
             "N8N_WEBHOOK_URL": "",
@@ -105,11 +105,16 @@ def main() -> None:
                     expect(page.get_by_role("heading", name="Vamos começar?")).to_be_visible(
                         timeout=25000)
                     page.get_by_role("textbox", name="E-mail").fill(
-                        "avaliador@teste.invalid")
+                        "avaliador@example.com")
                     page.get_by_label("Senha", exact=True).fill(password)
                     page.get_by_role("button", name="Entrar no NexoFiscal").click()
-                    expect(page.get_by_role("heading", name="Central de emissão")).to_be_visible(
-                        timeout=30000)
+                    try:
+                        expect(page.get_by_role("heading", name="Central de emissão")).to_be_visible(
+                            timeout=30000)
+                    except AssertionError:
+                        # Texto da interface, não inputs/segredos, para diagnosticar o CI.
+                        print("UI após login (somente texto):", page.locator("body").inner_text()[:1200])
+                        raise
                     health = context.request.get(SITE + "/api/health")
                     if not health.ok or health.json()["fiscal"] != "simulador":
                         raise AssertionError("API fiscal precisa permanecer no simulador.")
